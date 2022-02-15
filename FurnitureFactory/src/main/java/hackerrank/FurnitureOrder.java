@@ -7,39 +7,53 @@ public class FurnitureOrder implements FurnitureOrderInterface {
      * TODO: Create a map of Furniture items to order quantities
      */
 
+    private final HashMap<Furniture,Integer> mapFurnitures;
+    
     /**
      * Initialize a new mapping of Furniture types to order quantities.
      */
     FurnitureOrder() {
-        // TODO: Complete the constructor
+       mapFurnitures = new HashMap<Furniture,Integer>();
     }
 
     public void addToOrder(final Furniture type, final int furnitureCount) {
-        // TODO: Complete the method
+        Integer count = 0;
+        if(mapFurnitures.containsKey(type)){
+              count =  mapFurnitures.get(type);
+        }
+        mapFurnitures.put(type,count + furnitureCount);
     }
 
     public HashMap<Furniture, Integer> getOrderedFurniture() {
         // TODO: Complete the method
-        return null;
+        return new HashMap<Furniture, Integer>(mapFurnitures);
     }
 
     public float getTotalOrderCost() {
-        // TODO: Complete the method
-        return -1.0f;
+        if(!mapFurnitures.isEmpty()) {
+            return mapFurnitures.entrySet().stream().map(fun -> fun.getKey().cost() * fun.getValue()).collect(Collectors.toList()).stream().reduce(Float::sum).get();
+        }    
+        return 0.0f;
     }
 
     public int getTypeCount(Furniture type) {
-        // TODO: Complete the method
-        return -1;
+        if(mapFurnitures.containsKey(type)){
+            return mapFurnitures.get(type);   
+        }    
+        return 0;
     }
 
     public float getTypeCost(Furniture type) {
-        // TODO: Complete the method
-        return -1.0f;
+        if(mapFurnitures.containsKey(type)){
+            return mapFurnitures.get(type) * type.cost();   
+        }
+        return 0.0f;
     }
 
     public int getTotalOrderQuantity() {
-        // TODO: Complete the method
-        return -1;
+        if(!mapFurnitures.isEmpty()){
+            return mapFurnitures.values().stream().reduce(Integer::sum).get();
+        }  
+        return 0;
     }
 }
